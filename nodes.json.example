@@ -1,0 +1,20 @@
+{
+  "nodes": {
+    "server1": {
+      ":ip": "192.168.35.91",
+      "ports": [],
+      ":memory": 1024,
+      ":box": "centos/7",
+      ":bootstrap": "bootstrap-centos.sh",
+      ":sync": ["~/test", "/data"]
+    },
+    "server2": {
+      ":ip": "192.168.35.92",
+      "ports": [],
+      ":memory": 1024,
+      ":box": "centos/7",
+      ":bootstrap": "bootstrap-centos.sh",
+      ":sync": ["~/test", "/data"]
+    }
+  }
+}
