@@ -93,6 +93,7 @@ EOM
 
   # Requirements for azure cli
   yum -y install libffi-devel gcc
+
 else
   # UPDATES
   yum -y update
@@ -140,3 +141,6 @@ do
   su - vagrant -c "pip install --upgrade --user $i"
 done
 
+# Install googler
+googler_url=`curl -s https://api.github.com/repos/jarun/googler/releases/latest |jq -r ".assets[] | select(.name|test(\"centos\")) .browser_download_url"`
+rpm -Uhv $googler_url

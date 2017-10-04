@@ -28,6 +28,9 @@ The following helper tools will be installed:
 - bpython (https://bpython-interpreter.org/)
 - jmsepath-terminal (https://pypi.python.org/pypi/jmespath-terminal)
 
+Other tools:
+- googler (https://github.com/jarun/googler)
+
 # Usage
 ## Requirements
 - Vagrant
