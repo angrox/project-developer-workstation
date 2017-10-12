@@ -30,7 +30,7 @@ if [ -z "$UPDATE" ]; then
   yum install -y sudo
 
   # Requirements for the things below and a few utilities
-  sudo yum -y install wget unzip nodejs telnet jq nmap traceroute tcpdump strace ltrace mtr rsync zip myrepo git
+  sudo yum -y install wget unzip nodejs telnet jq nmap traceroute tcpdump strace ltrace mtr rsync zip myrepo git recode
   sudo yum -y install java-1.8.0-openjdk java-1.8.0-openjdk-devel
 
   # Docker Repo
