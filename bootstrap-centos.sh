@@ -107,7 +107,8 @@ curl https://raw.githubusercontent.com/Thubo/dotconfig-vim/master/.vimrc >/home/
 chown vagrant:vagrant /home/vagrant/.vimrc
 
 # docker compose
-curl -L https://github.com/docker/compose/releases/download/1.12.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
+URL=`curl -s https://api.github.com/repos/docker/compose/releases/latest | jq -r ".assets[]|select(.name==\"docker-compose-Linux-x86_64\").browser_download_url"`
+curl -L $URL > /usr/local/bin/docker-compose
 chmod 755 /usr/local/bin/docker-compose
 
 # Profitbricks CLI
@@ -126,6 +127,9 @@ sudo chmod 755 /usr/local/bin/terraform
 # Kubectl
 curl -o /usr/local/bin/kubectl -L https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 chmod 755 /usr/local/bin/kubectl
+
+# Install HELM
+curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
 
 # Add cli tools
 # Upgraded version of pip

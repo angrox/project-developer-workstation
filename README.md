@@ -14,12 +14,12 @@ Features:
 
 The following cloud tools will be installed:
 - Terraform
-- Profitbricks Terraform plugin
 - Google Cloud Shell
 - AWS CLI
 - AWS EB CLI
 - Azure CLI 2.0
-- Kubectl
+- Kubectl (latest)
+- Kubernetes Helm Client (latest)
 
 The following helper tools will be installed:
 - wharfee (http://wharfee.com/)
