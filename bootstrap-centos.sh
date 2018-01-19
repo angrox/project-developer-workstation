@@ -64,6 +64,18 @@ EOM
   # Install the Cloud SDK
   sudo yum -y install google-cloud-sdk
 
+  # Azure CLI
+  sudo tee -a /etc/yum.repos.d/google-cloud-sdk.repo << EOM
+[azure-cli]
+name=Azure CLI
+baseurl=https://packages.microsoft.com/yumrepos/azure-cli
+enabled=1
+gpgcheck=1
+gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+EOM
+  rpm --import https://packages.microsoft.com/keys/microsoft.asc
+  sudo yum -y install azure-cli
+
   # Python 3.5
   yum -y --nogpgcheck install python35 rh-python35-python-pip scl-utils rh-python35-python-devel
   source /opt/rh/rh-python35/enable
@@ -140,7 +152,7 @@ curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash
 # Install jmsepath-terminal (https://pypi.python.org/pypi/jmespath-terminal)
 # AWS CLI and Elastic Beanstalk CLI
 # Azure CLI
-for i in pip wharfee pgcli mycli bpython jmespath-terminal awscli awsebcli azure-cli
+for i in pip wharfee pgcli mycli bpython jmespath-terminal awscli awsebcli
 do
   su - vagrant -c "pip install --upgrade --user $i"
 done
