@@ -21,7 +21,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.hostmanager.ignore_private_ip = false
     config.hostmanager.include_offline = true
 
-    config.vm.provision :shell, inline: "sudo /sbin/ifup eth1", run: 'always'
     config.vm.define node_name do |config|
       # configures all forwarding ports in JSON array
       ports = node_values['ports']
@@ -44,7 +43,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize ["modifyvm", :id, "--name", node_name]
       end
 
-      config.vm.provision :shell, inline: "sudo /sbin/ifup eth1", run: 'always'
       config.vm.provision :shell, :path => node_values[':bootstrap']
       #config.vm.synced_folder node_values[':sync'][0], node_values[':sync'][1], type: "nfs"
       config.vm.synced_folder node_values[':sync'][0], node_values[':sync'][1]
