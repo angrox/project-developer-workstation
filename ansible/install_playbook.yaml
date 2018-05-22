@@ -1,0 +1,89 @@
+- hosts: localhost
+  tasks:
+  - name: Add azure-cli DNF/YUM repos
+    yum_repository:
+      name: azure-cli
+      description: "Azure CLI"
+      enabled: yes
+      baseurl: https://packages.microsoft.com/yumrepos/azure-cli
+      gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+      gpgcheck: yes
+    become: true
+  - name: Add google cloud sdk DNF/YUM repos
+    yum_repository:
+      name: google-cloud-sdk
+      description: "Google Cloud SDK"
+      enabled: yes
+      baseurl: https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64
+      gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+      gpgcheck: yes
+    become: true
+  - name: Upgrade all packages
+    package:
+      name: "*"
+      state: latest
+    become: true
+  - name: Install packages
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - git
+      - docker
+      - docker-compose
+      - azure-cli
+      - vim-enhanced
+      - python3
+      - python3-devel
+      - wget
+      - unzip
+      - telnet
+      - nodejs
+      - jq
+      - nmap
+      - traceroute
+      - tcpdump
+      - strace
+      - ltrace
+      - mtr
+      - rsync
+      - zip
+      - myrepos
+      - recode
+      - java-1.8.0-openjdk
+      - java-1.8.0-openjdk-devel
+      - google-cloud-sdk
+      - redhat-rpm-config
+      - kubectl
+      - libffi-devel
+      - gcc
+      - libselinux-python
+      - googler
+    become: true
+  - name: Install pip tools
+    command:
+      cmd: "pip3 install --upgrade --user {{ item }}"
+    with_items:
+      - wharfee
+      - pgcli
+      - mycli
+      - bpython
+      - jmespath-terminal
+    become: yes
+    become_user: vagrant
+  - name: Install profitbricks-cli
+    command:
+      cmd: "npm install -g profitbricks-cli"
+    become: true
+  - name: Install liquidprompt
+    command:
+      cmd: "git clone https://github.com/nojhan/liquidprompt.git /usr/share/liquidprompt"
+      creates: /usr/share/liquidprompt
+    become: true
+  - name: Install Thubos vim config
+    get_url:
+      url: https://raw.githubusercontent.com/Thubo/dotconfig-vim/master/.vimrc
+      dest: ~/.vimrc
+    become: true
+    become_user: vagrant
+
