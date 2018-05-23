@@ -9,6 +9,7 @@
       gpgkey: https://packages.microsoft.com/keys/microsoft.asc
       gpgcheck: yes
     become: true
+
   - name: Add google cloud sdk DNF/YUM repos
     yum_repository:
       name: google-cloud-sdk
@@ -18,11 +19,23 @@
       gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
       gpgcheck: yes
     become: true
+
+  - name: Add kubernetes DNF/YUM repos
+    yum_repository:
+      name: kubernetes
+      description: "Kubernetes"
+      enabled: yes
+      baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+      gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+      gpgcheck: yes
+    become: true
+
   - name: Upgrade all packages
     package:
       name: "*"
       state: latest
     become: true
+
   - name: Install packages
     package:
       name: "{{ item }}"
@@ -59,7 +72,9 @@
       - gcc
       - libselinux-python
       - googler
+      - bash-completion
     become: true
+
   - name: Install pip tools
     command:
       cmd: "pip3 install --upgrade --user {{ item }}"
@@ -71,19 +86,43 @@
       - jmespath-terminal
     become: yes
     become_user: vagrant
+
   - name: Install profitbricks-cli
     command:
       cmd: "npm install -g profitbricks-cli"
     become: true
+
   - name: Install liquidprompt
     command:
       cmd: "git clone https://github.com/nojhan/liquidprompt.git /usr/share/liquidprompt"
       creates: /usr/share/liquidprompt
     become: true
+
   - name: Install Thubos vim config
     get_url:
       url: https://raw.githubusercontent.com/Thubo/dotconfig-vim/master/.vimrc
       dest: ~/.vimrc
     become: true
     become_user: vagrant
+  - name: Install helm
+    shell:
+      cmd: "curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash"
+      creates: /usr/local/bin/helm
+    become: true
+  - name: Install kubectx
+    get_url:
+      url: https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx
+      dest: /usr/local/bin/kubectx
+  - name: Install kubens
+    get_url:
+      url: https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens
+      dest: /usr/local/bin/kubens
+  - name: Filemods for kubens and kubectx
+    file:
+      path: "/usr/local/bin/{{ item }}"
+      mode: 0755
+    with_items:
+      - kubens
+      - kubectx
+    become: true
 

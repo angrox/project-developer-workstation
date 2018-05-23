@@ -17,11 +17,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.box = node_values[':box']
 
-    config.hostmanager.enabled = true
-    config.hostmanager.manage_host = true
-    config.hostmanager.ignore_private_ip = false
-    config.hostmanager.include_offline = true
-
     config.vm.provision :shell, inline: "echo Inliner", run: 'always'
 
     config.vm.define node_name do |config|
@@ -34,7 +29,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           id:    port[':id']
       end
 
-    #config.vm.network :private_network, auto_config: false
     config.vm.hostname = node_name
       if node_values[':ip']== "dhcp"
         config.vm.network :private_network, type: "dhcp"
@@ -45,7 +39,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize ["modifyvm", :id, "--memory", node_values[':memory']]
         vb.customize ["modifyvm", :id, "--name", node_name]
       end
-      config.vm.provision :shell, inline: "echo Inliner", run: 'always'
+      # Ugly workaround to get the resolv.conf filled :-/
+      config.vm.provision :shell, inline: "systemctl restart network", run: 'always'
 
       config.vm.provision :shell, :path => node_values[':bootstrap']
       #config.vm.synced_folder node_values[':sync'][0], node_values[':sync'][1], type: "nfs"
