@@ -3,22 +3,17 @@
 This Vagrant VM is aimed for cloud developers who need access to various cloud providers.
 
 Features:
-- Centos 7.x
+- Fedora 28
 - VIM 8.x + Thubos Vim Configuration
 - Docker CE
-- SDKman (for Gradle & co)
 - NodeJS
 - Java 1.8.0_x
-- Git 2.9
-- Python 3.5
 
 The following cloud tools will be installed:
-- Terraform
 - Google Cloud Shell
-- AWS CLI
-- AWS EB CLI
 - Azure CLI 2.0
 - Kubectl (latest)
+- Kubectx/Kubens
 - Kubernetes Helm Client (latest)
 
 The following helper tools will be installed:
@@ -50,21 +45,18 @@ Other tools:
       ":ip": "192.168.35.91",                <-- ip address or 'dhcp'
       "ports": [],                           <-- ports to forward to localhost
       ":memory": 1024,
-      ":box": "centos/7",
-      ":bootstrap": "bootstrap-centos.sh",
+      ":box": "fedora/28-cloud-base",
+      ":bootstrap": "bootstrap-fedora.sh",
       ":sync": ["~/test", "/data"]           <-- Directory mount. This is useful to keep your data on your local Disk. First argument is the local path.
     },
     "server2": {                             <-- Second VM if needed. If not delete it. Mind the ',' in the line above!
       ":ip": "192.168.35.92",
       "ports": [],
       ":memory": 1024,
-      ":box": "centos/7",
-      ":bootstrap": "bootstrap-centos.sh",
+      ":box": "fedora/28-cloud-base",
+      ":bootstrap": "bootstrap-fedora.sh",
       ":sync": ["~/test", "/data"]
     }
   }
 }
 ```
-
-## Todo
-* Move bootstrap-centos.sh to Puppet or Ansible
