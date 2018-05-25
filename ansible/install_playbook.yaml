@@ -76,6 +76,7 @@
       - apg
       - haveged
       - bind-utils
+      - httpd-tools
     become: true
 
   - name: Install pip tools
