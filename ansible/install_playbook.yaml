@@ -73,6 +73,9 @@
       - libselinux-python
       - googler
       - bash-completion
+      - apg
+      - haveged
+      - bind-utils
     become: true
 
   - name: Install pip tools
@@ -86,6 +89,15 @@
       - jmespath-terminal
     become: yes
     become_user: vagrant
+
+  - name: Enable and start services
+    service:
+      name: "{{ item }}"
+      state: started
+      enabled: yes
+    with_items:
+      - haveged
+    become: true
 
   - name: Install profitbricks-cli
     command:
