@@ -30,6 +30,19 @@
       gpgcheck: yes
     become: true
 
+  - name: Add official docker repos
+    get_url:
+      url: https://download.docker.com/linux/fedora/docker-ce.repo
+      dest: /etc/yum.repos.d/docker-ce.repo
+    become: true
+    register: dockerce_downloaded
+
+  - name: Enable docker-ce-nightly
+    command:
+      cmd: dnf config-manager --set-disabled docker-ce-nightly
+    when: dockerce_downloaded.changed
+    become: true
+
   - name: Upgrade all packages
     package:
       name: "*"
@@ -42,7 +55,7 @@
       state: latest
     with_items:
       - git
-      - docker
+      - docker-ce
       - docker-compose
       - azure-cli
       - vim-enhanced
