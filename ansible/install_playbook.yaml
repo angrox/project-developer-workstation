@@ -1,5 +1,12 @@
 - hosts: localhost
   tasks:
+  - name: Install initial required packages
+    package:
+      name: "{{ item }}"
+      state: latest
+    with_items:
+      - libselinux-python
+
   - name: Add azure-cli DNF/YUM repos
     yum_repository:
       name: azure-cli
