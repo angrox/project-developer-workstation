@@ -6,6 +6,7 @@
       state: latest
     with_items:
       - libselinux-python
+    become: true
 
   - name: Add azure-cli DNF/YUM repos
     yum_repository:
@@ -97,6 +98,8 @@
       - haveged
       - bind-utils
       - httpd-tools
+      - tree
+      - htop
     become: true
 
   - name: Install pip tools
