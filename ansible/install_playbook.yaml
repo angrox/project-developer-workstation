@@ -137,7 +137,7 @@
   - name: Install Thubos vim config
     get_url:
       url: https://raw.githubusercontent.com/Thubo/dotconfig-vim/master/.vimrc
-      dest: ~/.vimrc
+      dest: /home/vagrant/.vimrc
     become: true
     become_user: vagrant
   - name: Install helm
