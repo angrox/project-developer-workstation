@@ -1,0 +1,26 @@
+#!/bin/bash
+
+
+get_latest_release() {
+  curl --silent -m 10 "https://api.github.com/repos/$1/releases/latest" |
+    grep '"tag_name":' |
+    sed -E 's/.*"([^"]+)".*/\1/'
+}
+
+
+remote_version=$(get_latest_release "helm/helm")
+local_version=$(helm version --client --short | awk -F '[ +]' '{print $2}')
+
+if [ -z "$remote_version" ]
+then
+  echo "0"
+  exit 0
+fi
+if [ "$remote_version" == "$local_version" ]
+then
+  echo "0"
+  exit 0
+fi
+
+echo "1"
+

@@ -140,19 +140,33 @@
       dest: /home/vagrant/.vimrc
     become: true
     become_user: vagrant
+
+  - name: Check local and remote helm version
+    command: "/usr/local/bin/update_helm"
+    register: update_helm
+
+  - name: Set update_helm fact
+    set_fact:
+      update_helm: "{{ update_helm.stdout_lines[0]|int }}"
+
   - name: Install helm
     shell:
       cmd: "curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash"
-      creates: /usr/local/bin/helm
     become: true
+    when: update_helm == 1
+
   - name: Install kubectx
     get_url:
       url: https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx
       dest: /usr/local/bin/kubectx
+    become: true
+
   - name: Install kubens
     get_url:
       url: https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens
       dest: /usr/local/bin/kubens
+    become: true
+
   - name: Filemods for kubens and kubectx
     file:
       path: "/usr/local/bin/{{ item }}"
