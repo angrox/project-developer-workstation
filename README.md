@@ -1,4 +1,4 @@
-# CentOS Vagrant VM for Cloud Developers
+# Fedora Vagrant VM for Cloud Developers
 
 This Vagrant VM is aimed for cloud developers who need access to various cloud providers.
 
