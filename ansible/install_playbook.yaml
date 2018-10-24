@@ -102,7 +102,6 @@
 
   - name: Install packages via cmd
     command: "dnf install -y {{ packages_to_install | join(' ') }}"
-    warn: False
 
   - name: Install pip tools
     command:
