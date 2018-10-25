@@ -48,6 +48,7 @@
   - name: Enable docker-ce-nightly
     command:
       cmd: dnf config-manager --set-disabled docker-ce-nightly
+      warn: False
     when: dockerce_downloaded.changed
     become: true
 
@@ -101,7 +102,9 @@
         - goaccess
 
   - name: Install packages via cmd
-    command: "dnf install -y {{ packages_to_install | join(' ') }}"
+    command:
+      cmd: "dnf install -y {{ packages_to_install | join(' ') }}"
+      warn: False
 
   - name: Install pip tools
     command:
