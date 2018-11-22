@@ -101,6 +101,7 @@
         - htop
         - goaccess
         - whois
+        - go
 
   - name: Install packages via cmd
     command:
