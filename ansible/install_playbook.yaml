@@ -158,7 +158,7 @@
     shell:
       cmd: "curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash"
     become: true
-    when: update_helm == 1
+    when: update_helm
 
   - name: Install kubectx
     get_url:
