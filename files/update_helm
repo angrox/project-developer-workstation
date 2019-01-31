@@ -7,6 +7,12 @@ get_latest_release() {
     sed -E 's/.*"([^"]+)".*/\1/'
 }
 
+which helm >/dev/null 2>&1
+if [ $? != 0 ]
+then
+  echo "1"
+  exit 0
+fi
 
 remote_version=$(get_latest_release "helm/helm")
 local_version=$(helm version --client --short | awk -F '[ +]' '{print $2}')
