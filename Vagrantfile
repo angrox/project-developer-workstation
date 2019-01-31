@@ -17,7 +17,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.box = node_values[':box']
 
-    config.vm.provision :shell, inline: "echo Inliner", run: 'always'
 
     config.vm.define node_name do |config|
       # configures all forwarding ports in JSON array
@@ -39,11 +38,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize ["modifyvm", :id, "--memory", node_values[':memory']]
         vb.customize ["modifyvm", :id, "--name", node_name]
       end
-      # Ugly workaround to get the resolv.conf filled :-/
-      config.vm.provision :shell, inline: "systemctl restart network", run: 'always'
 
       config.vm.provision :shell, :path => node_values[':bootstrap']
-      #config.vm.synced_folder node_values[':sync'][0], node_values[':sync'][1], type: "nfs"
       config.vm.synced_folder node_values[':sync'][0], node_values[':sync'][1]
     end
   end
