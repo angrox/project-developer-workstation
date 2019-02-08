@@ -182,3 +182,9 @@
       - kubectx
     become: true
 
+  - name: Install or Update k9s
+    command:
+      cmd: /usr/local/bin/install_k9s
+      warn: False
+    become: true
+
