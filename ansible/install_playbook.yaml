@@ -102,6 +102,7 @@
         - goaccess
         - whois
         - go
+        - shyaml
 
   - name: Install packages via cmd
     command:
