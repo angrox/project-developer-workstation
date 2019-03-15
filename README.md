@@ -3,7 +3,7 @@
 This Vagrant VM is aimed for cloud developers who need access to various cloud providers.
 
 Features:
-- Fedora 28
+- Fedora 29
 - VIM 8.x + Thubos Vim Configuration
 - Docker CE
 - NodeJS
@@ -14,6 +14,7 @@ The following cloud tools will be installed:
 - Azure CLI 2.0
 - Kubectl (latest)
 - Kubectx/Kubens
+- K9s
 - Kubernetes Helm Client (latest)
 
 The following helper tools will be installed:
@@ -45,7 +46,7 @@ Other tools:
       ":ip": "192.168.35.91",                <-- ip address or 'dhcp'
       "ports": [],                           <-- ports to forward to localhost
       ":memory": 1024,
-      ":box": "fedora/28-cloud-base",
+      ":box": "fedora/29-cloud-base",
       ":bootstrap": "bootstrap-fedora.sh",
       ":sync": ["~/test", "/data"]           <-- Directory mount. This is useful to keep your data on your local Disk. First argument is the local path.
     },
@@ -53,7 +54,7 @@ Other tools:
       ":ip": "192.168.35.92",
       "ports": [],
       ":memory": 1024,
-      ":box": "fedora/28-cloud-base",
+      ":box": "fedora/29-cloud-base",
       ":bootstrap": "bootstrap-fedora.sh",
       ":sync": ["~/test", "/data"]
     }
