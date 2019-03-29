@@ -1,6 +1,6 @@
 #!/bin/sh
 
-dnf -y install ansible
-cp /vagrant/files/update_helm /usr/local/bin
+dnf -y install ansible bison flex psmisc
+cp /vagrant/files/bin/* /usr/local/bin
 chmod 755 /usr/local/bin
 ansible-playbook /vagrant/ansible/install_playbook.yaml
