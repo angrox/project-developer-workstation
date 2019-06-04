@@ -161,7 +161,6 @@
   - name: Check local and remote terraform version
     command: "/usr/local/bin/update_terraform"
     register: update_terraform
-    become: true
 
   - name: Set update_terraform fact
     set_fact:
