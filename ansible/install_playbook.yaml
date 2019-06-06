@@ -91,6 +91,7 @@
         - libffi-devel
         - gcc
         - libselinux-python
+        - libpqxx-devel
         - googler
         - bash-completion
         - apg
@@ -204,3 +205,20 @@
       cmd: /usr/local/bin/install_terraform
     become: true
     when: update_terraform
+
+  - name: Check oh-my-zsh installed
+    command: "/usr/local/bin/oh_my_zsh_installed"
+    register: oh_my_zsh_installed
+    become: yes
+    become_user: vagrant
+
+  - name: Set oh_my_zsh_installed fact
+    set_fact:
+      oh_my_zsh_installed: "{{ oh_my_zsh_installed.stdout_lines[0]|int }}"
+
+  - name: Install and configure oh-my-zsh
+    shell:
+      cmd: install_oh_my_zsh
+    when: oh_my_zsh_installed
+    become: yes
+    become_user: vagrant
