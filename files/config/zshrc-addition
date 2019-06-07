@@ -1,0 +1,15 @@
+# The following lines will get added to the end of .zshrc
+
+source $ZSH/oh-my-zsh.sh
+
+# load az cli completion
+autoload bashcompinit
+bashcompinit
+source $ZSH/bash-completion/az.completion
+
+source <(kubectl completion zsh)
+
+POWERLEVEL9K_SHORTEN_STRATEGY=truncate_to_first_and_last
+POWERLEVEL9K_SHORTEN_DIR_LENGTH=1
+
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status kubecontext root_indicator background_jobs time)

@@ -1,0 +1,20 @@
+#!/bin/bash
+
+# install oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+# install azure cli completion
+mkdir -p $HOME/.oh-my-zsh/bash-completion
+curl -fsSL https://raw.githubusercontent.com/Azure/azure-cli/dev/az.completion > $HOME/.oh-my-zsh/bash-completion/az.completion
+
+# install powerlevel9k THEME
+git clone https://github.com/bhilburn/powerlevel9k.git $HOME/.oh-my-zsh/custom/themes/powerlevel9k
+
+# set powerlevel9k as theme
+sed -i 's:ZSH_THEME=".*":ZSH_THEME="powerlevel9k/powerlevel9k":g' $HOME/.zshrc
+
+cp /vagrant/files/config/zshrc-addition $HOME/.oh-my-zsh/zshrc-addition
+
+cat <<EOF >> $HOME/.zshrc
+source $HOME/.oh-my-zsh/zshrc-addition
+EOF

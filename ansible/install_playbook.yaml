@@ -91,6 +91,7 @@
         - libffi-devel
         - gcc
         - libselinux-python
+        - libpqxx-devel
         - googler
         - bash-completion
         - apg
@@ -103,11 +104,13 @@
         - whois
         - go
         - shyaml
+        - zsh
 
   - name: Install packages via cmd
     command:
       cmd: "dnf install -y {{ packages_to_install | join(' ') }}"
       warn: False
+    become: yes
 
   - name: Install pip tools
     command:
@@ -156,6 +159,14 @@
     set_fact:
       update_helm: "{{ update_helm.stdout_lines[0]|int }}"
 
+  - name: Check local and remote terraform version
+    command: "/usr/local/bin/update_terraform"
+    register: update_terraform
+
+  - name: Set update_terraform fact
+    set_fact:
+      update_terraform: "{{ update_terraform.stdout_lines[0]|int }}"
+
   - name: Install helm
     shell:
       cmd: "curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash"
@@ -189,3 +200,25 @@
       warn: False
     become: true
 
+  - name: Install Terraform
+    shell:
+      cmd: /usr/local/bin/install_terraform
+    become: true
+    when: update_terraform
+
+  - name: Check oh-my-zsh installed
+    command: "/usr/local/bin/oh_my_zsh_installed"
+    register: oh_my_zsh_installed
+    become: yes
+    become_user: vagrant
+
+  - name: Set oh_my_zsh_installed fact
+    set_fact:
+      oh_my_zsh_installed: "{{ oh_my_zsh_installed.stdout_lines[0]|int }}"
+
+  - name: Install and configure oh-my-zsh
+    shell:
+      cmd: install_oh_my_zsh
+    when: oh_my_zsh_installed
+    become: yes
+    become_user: vagrant
