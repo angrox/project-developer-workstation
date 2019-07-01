@@ -104,6 +104,7 @@
         - whois
         - go
         - shyaml
+        - util-linux-user
         - zsh
 
   - name: Install packages via cmd
@@ -171,7 +172,7 @@
     shell:
       cmd: "curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash"
     become: true
-    when: update_helm
+    when: update_helm|bool
 
   - name: Install kubectx
     get_url:
@@ -204,7 +205,7 @@
     shell:
       cmd: /usr/local/bin/install_terraform
     become: true
-    when: update_terraform
+    when: update_terraform|bool
 
   - name: Check oh-my-zsh installed
     command: "/usr/local/bin/oh_my_zsh_installed"
@@ -219,6 +220,15 @@
   - name: Install and configure oh-my-zsh
     shell:
       cmd: install_oh_my_zsh
-    when: oh_my_zsh_installed
+    when: oh_my_zsh_installed|bool
     become: yes
     become_user: vagrant
+
+  - name: Set zsh as default shell
+    when: oh_my_zsh_installed|bool  
+    become: yes
+    become_user: vagrant
+    expect:
+        command: "chsh -s /usr/bin/zsh"
+        responses:
+          (?i)password: "vagrant"
