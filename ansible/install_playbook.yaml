@@ -47,7 +47,7 @@
 
   - name: Enable docker-ce-nightly
     command:
-      cmd: dnf config-manager --set-disabled docker-ce-nightly
+      cmd: dnf config-manager --set-enabled docker-ce-nightly
       warn: False
     when: dockerce_downloaded.changed
     become: true

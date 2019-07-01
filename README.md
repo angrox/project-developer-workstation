@@ -3,7 +3,7 @@
 This Vagrant VM is aimed for cloud developers who need access to various cloud providers.
 
 Features:
-- Fedora 29
+- Fedora 30
 - VIM 8.x + Thubos Vim Configuration
 - Docker CE
 - NodeJS
