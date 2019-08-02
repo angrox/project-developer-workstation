@@ -207,6 +207,12 @@
     become: true
     when: update_terraform|bool
 
+  - name: Install or Update Terragrunt
+    command:
+      cmd: /usr/local/bin/install_terragrunt
+      warn: False
+    become: true
+
   - name: Check oh-my-zsh installed
     command: "/usr/local/bin/oh_my_zsh_installed"
     register: oh_my_zsh_installed
