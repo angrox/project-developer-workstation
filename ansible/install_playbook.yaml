@@ -153,7 +153,7 @@
     become_user: vagrant
 
   - name: Check local and remote terraform version
-    command: "/usr/local/bin/update_terraform"
+    command: "/vagrant/files/bin/update_terraform"
     register: update_terraform
 
   - name: Set update_terraform fact
@@ -162,12 +162,12 @@
 
   - name: Install Terraform
     shell:
-      cmd: /usr/local/bin/install_terraform
+      cmd: "vagrant/files/bin/install_terraform"
     become: true
     when: update_terraform|bool
 
   - name: Check local and remote helm version
-    command: "/usr/local/bin/update_helm"
+    command: "/vagrant/files/bin/update_helm"
     register: update_helm
 
   - name: Set update_helm fact
@@ -176,7 +176,7 @@
 
   - name: Install helm
     shell:
-      cmd: /usr/local/bin/install_helm
+      cmd: "/vagrant/files/bin/install_helm"
     become: true
     when: update_helm|bool
 
@@ -203,18 +203,18 @@
 
   - name: Install or Update k9s
     command:
-      cmd: /usr/local/bin/install_k9s
+      cmd: /vagrant/files/bin/install_k9s
       warn: False
     become: true
 
   - name: Install or Update Terragrunt
     command:
-      cmd: /usr/local/bin/install_terragrunt
+      cmd: /vagrant/files/bin/install_terragrunt
       warn: False
     become: true
 
   - name: Check oh-my-zsh installed
-    command: "/usr/local/bin/oh_my_zsh_installed"
+    command: "/vagrant/files/bin/oh_my_zsh_installed"
     register: oh_my_zsh_installed
     become: yes
     become_user: vagrant
