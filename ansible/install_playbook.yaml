@@ -213,6 +213,12 @@
       warn: False
     become: true
 
+  - name: Install or Update Kubebox
+    command:
+      cmd: /vagrant/files/bin/install_kubebox
+      warn: False
+    become: true
+
   - name: Check oh-my-zsh installed
     command: "/vagrant/files/bin/oh_my_zsh_installed"
     register: oh_my_zsh_installed
