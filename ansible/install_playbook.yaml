@@ -152,14 +152,6 @@
     become: true
     become_user: vagrant
 
-  - name: Check local and remote helm version
-    command: "/usr/local/bin/update_helm"
-    register: update_helm
-
-  - name: Set update_helm fact
-    set_fact:
-      update_helm: "{{ update_helm.stdout_lines[0]|int }}"
-
   - name: Check local and remote terraform version
     command: "/usr/local/bin/update_terraform"
     register: update_terraform
@@ -168,9 +160,23 @@
     set_fact:
       update_terraform: "{{ update_terraform.stdout_lines[0]|int }}"
 
+  - name: Install Terraform
+    shell:
+      cmd: /usr/local/bin/install_terraform
+    become: true
+    when: update_terraform|bool
+
+  - name: Check local and remote helm version
+    command: "/usr/local/bin/update_helm"
+    register: update_helm
+
+  - name: Set update_helm fact
+    set_fact:
+      update_helm: "{{ update_helm.stdout_lines[0]|int }}"
+
   - name: Install helm
     shell:
-      cmd: "curl https://raw.githubusercontent.com/kubernetes/helm/master/scripts/get | bash"
+      cmd: /usr/local/bin/install_helm
     become: true
     when: update_helm|bool
 
@@ -200,12 +206,6 @@
       cmd: /usr/local/bin/install_k9s
       warn: False
     become: true
-
-  - name: Install Terraform
-    shell:
-      cmd: /usr/local/bin/install_terraform
-    become: true
-    when: update_terraform|bool
 
   - name: Install or Update Terragrunt
     command:
