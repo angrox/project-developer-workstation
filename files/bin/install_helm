@@ -10,7 +10,9 @@ remote_version=$(get_latest_release "helm/helm")
 
 curl -L -s --output /tmp/helm-v${remote_version}-linux-amd64.tar.gz https://get.helm.sh/helm-v${remote_version}-linux-amd64.tar.gz
 tar xvzf /tmp/helm-v${remote_version}-linux-amd64.tar.gz -C /tmp
-cp /tmp/linux-amd64/helm /usr/local/bin/helm3
-chmod 755 /usr/local/bin/helm
+rm /usr/local/bin/helm*
+cp /tmp/linux-amd64/helm /usr/local/bin/helm-${remote_version}
+ln -s /usr/local/bin/helm-${remote_version} /usr/local/bin/helm
+chmod 755 /usr/local/bin/helm-${remote_version}
 rm /tmp/helm-v${remote_version}-linux-amd64.tar.gz
 rm -rf /tmp/linux-amd64
