@@ -115,15 +115,15 @@
 
   - name: Install pip tools
     command:
-      cmd: "pip3 install --upgrade --user {{ item }}"
+      cmd: "pip3 install --upgrade {{ item }}"
     with_items:
       - wharfee
       - pgcli
       - mycli
       - bpython
       - jmespath-terminal
+      - terraform-compliance
     become: yes
-    become_user: vagrant
 
   - name: Enable and start services
     service:
@@ -216,6 +216,12 @@
   - name: Install or Update Kubebox
     command:
       cmd: /vagrant/files/bin/install_kubebox
+      warn: False
+    become: true
+
+  - name: Install or Update Stern
+    command:
+      cmd: /vagrant/files/bin/install_stern
       warn: False
     become: true
 
