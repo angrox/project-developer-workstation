@@ -1,13 +1,5 @@
 - hosts: localhost
   tasks:
-  - name: Install initial required packages
-    package:
-      name: "{{ item }}"
-      state: latest
-    with_items:
-      - libselinux-python
-    become: true
-
   - name: Add azure-cli DNF/YUM repos
     yum_repository:
       name: azure-cli
@@ -44,6 +36,8 @@
       dest: /etc/yum.repos.d/docker-ce.repo
     become: true
     register: dockerce_downloaded
+    tags:
+      - vm_only
 
   - name: Enable docker-ce-nightly
     command:
@@ -51,6 +45,8 @@
       warn: False
     when: dockerce_downloaded.changed
     become: true
+    tags:
+      - vm_only
 
   - name: Upgrade all packages
     package:
@@ -58,12 +54,17 @@
       state: latest
     become: true
 
-  - name: Create packages-to-install list
+  - name: Create packages-to-install list for VM usage
+    set_fact:
+      packages_to_install_vm:
+        - docker-ce
+        - docker-compose
+        - haveged
+
+  - name: Create packages-to-install list for all usages
     set_fact:
       packages_to_install:
         - git
-        - docker-ce
-        - docker-compose
         - azure-cli
         - vim-enhanced
         - python3
@@ -90,12 +91,10 @@
         - kubectl
         - libffi-devel
         - gcc
-        - libselinux-python
         - libpqxx-devel
         - googler
         - bash-completion
         - apg
-        - haveged
         - bind-utils
         - httpd-tools
         - tree
@@ -107,11 +106,19 @@
         - util-linux-user
         - zsh
 
-  - name: Install packages via cmd
+  - name: Install packages via cmd for all usecases
     command:
       cmd: "dnf install -y {{ packages_to_install | join(' ') }}"
       warn: False
     become: yes
+
+  - name: Install packages via cmd for VM usage
+    command:
+      cmd: "dnf install -y {{ packages_to_install_vm | join(' ') }}"
+      warn: False
+    become: yes
+    tags:
+      - vm_only
 
   - name: Install pip tools
     command:
@@ -133,6 +140,8 @@
     with_items:
       - haveged
     become: true
+    tags:
+      - vm_only
 
   - name: Install profitbricks-cli
     command:
@@ -243,7 +252,7 @@
     become_user: vagrant
 
   - name: Set zsh as default shell
-    when: oh_my_zsh_installed|bool  
+    when: oh_my_zsh_installed|bool
     become: yes
     become_user: vagrant
     expect:
