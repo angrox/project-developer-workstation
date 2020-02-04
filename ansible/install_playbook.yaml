@@ -109,6 +109,7 @@
         - shyaml
         - util-linux-user
         - zsh
+        - the_silver_searcher
 
   - name: Install packages via cmd for all usecases
     command:
