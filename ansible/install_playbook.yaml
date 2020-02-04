@@ -53,6 +53,8 @@
       name: "*"
       state: latest
     become: true
+    tags:
+      - update_os
 
   - name: Create packages-to-install list for VM usage
     set_fact:
@@ -60,6 +62,8 @@
         - docker-ce
         - docker-compose
         - haveged
+    tags:
+      - vm_only
 
   - name: Create packages-to-install list for all usages
     set_fact:
@@ -120,6 +124,16 @@
     tags:
       - vm_only
 
+  - name: Set disable_coredumps in /etc/sudo.conf
+    lineinfile:
+      path: /etc/sudo.conf
+      regex: "^Set disable_coredump"
+      line: "Set disable_coredump false"
+      create: true
+    become: yes
+    tags:
+      - vm_only
+
   - name: Install pip tools
     command:
       cmd: "pip3 install --upgrade {{ item }}"
@@ -171,7 +185,7 @@
 
   - name: Install Terraform
     shell:
-      cmd: "vagrant/files/bin/install_terraform"
+      cmd: "/vagrant/files/bin/install_terraform"
     become: true
     when: update_terraform|bool
 
@@ -246,16 +260,13 @@
 
   - name: Install and configure oh-my-zsh
     shell:
-      cmd: install_oh_my_zsh
+      cmd: /vagrant/files/bin/install_oh_my_zsh
     when: oh_my_zsh_installed|bool
     become: yes
     become_user: vagrant
 
   - name: Set zsh as default shell
+    user:
+      name: vagrant
+      shell: /usr/bin/zsh
     when: oh_my_zsh_installed|bool
-    become: yes
-    become_user: vagrant
-    expect:
-        command: "chsh -s /usr/bin/zsh"
-        responses:
-          (?i)password: "vagrant"

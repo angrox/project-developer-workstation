@@ -11,11 +11,14 @@ Features:
 
 The following cloud tools will be installed:
 - Google Cloud Shell
-- Azure CLI 2.0
+- Azure CLI 2.0.x (latest)
 - Kubectl (latest)
-- Kubectx/Kubens
-- K9s
-- Kubernetes Helm Client (latest)
+- Kubectx/Kubens (https://github.com/ahmetb/kubectx/)
+- K9s (https://github.com/derailed/k9s)
+- Helm (https://helm.sh/)
+- Stern (https://github.com/wercker/stern)
+- Terraform (https://www.terraform.io/)
+- Terragrunt (https://github.com/gruntwork-io/terragrunt)
 
 The following helper tools will be installed:
 - wharfee (http://wharfee.com/)
@@ -26,6 +29,7 @@ The following helper tools will be installed:
 
 Other tools:
 - googler (https://github.com/jarun/googler)
+- terraform-compliance (https://terraform-compliance.com/)
 
 # Usage
 ## Requirements

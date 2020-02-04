@@ -39,7 +39,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           id:    port[':id']
       end
 
-    config.vm.hostname = node_name
+      config.vm.hostname = node_name
       if node_values[':ip']== "dhcp"
         config.vm.network :private_network, type: "dhcp"
       else
