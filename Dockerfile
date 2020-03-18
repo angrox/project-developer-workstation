@@ -5,7 +5,7 @@ FROM fedora:31
 COPY ansible/ /vagrant/ansible
 COPY files/ /vagrant/files
 
-RUN dnf --refresh install -y ansible vim dnf-plugins-core zsh \
+RUN dnf --refresh install -y ansible vim dnf-plugins-core zsh python3-pip procps-ng\
     && groupadd --gid 1000 vagrant \
     && adduser --create-home --home-dir /home/vagrant --uid 1000 --gid 1000 --shell /usr/bin/zsh vagrant \
     && echo "vagrant ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/vagrant-nopasswd \
