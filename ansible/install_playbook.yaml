@@ -169,13 +169,6 @@
       creates: /usr/share/liquidprompt
     become: true
 
-  - name: Install Thubos vim config
-    get_url:
-      url: https://raw.githubusercontent.com/Thubo/dotconfig-vim/master/.vimrc
-      dest: /home/vagrant/.vimrc
-    become: true
-    become_user: vagrant
-
   - name: Check local and remote terraform version
     command: "/vagrant/files/bin/update_terraform"
     register: update_terraform
