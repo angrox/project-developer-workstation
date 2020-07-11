@@ -156,7 +156,7 @@
 
   - name: Install Terraform
     shell:
-      cmd: "vagrant/files/bin/install_terraform"
+      cmd: "/vagrant/files/bin/install_terraform"
     become: true
     when: update_terraform|bool
 
@@ -231,7 +231,7 @@
 
   - name: Install and configure oh-my-zsh
     shell:
-      cmd: install_oh_my_zsh
+      cmd: "/vagrant/files/bin/install_oh_my_zsh"
     when: oh_my_zsh_installed|bool
     become: yes
     become_user: vagrant
