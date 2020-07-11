@@ -236,6 +236,13 @@
     become: yes
     become_user: vagrant
 
+  - name: Copy powerlevel10k config
+    become: yes
+    become_user: vagrant
+    copy:
+      src: /vagrant/files/config/p10k.zsh
+      dest: ~/.p10k.zsh
+
   - name: Set zsh as default shell
     when: oh_my_zsh_installed|bool  
     become: yes

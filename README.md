@@ -26,11 +26,20 @@ The following helper tools will be installed:
 
 Other tools:
 - googler (https://github.com/jarun/googler)
+- zsh (https://ohmyz.sh/)
+- powerlevel10k (https://github.com/romkatv/powerlevel10k)
+
+**powerlevel10k requires a compatible [font](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k).**
+
+Other ways to fix the font problem in the vagrant vm: 
+- Disable theme: set `ZSH_THEME=robbyrussell` in `~/.zshrc`
+- Run powerlevel10k configurator `p10k configure`
 
 # Usage
 ## Requirements
 - Vagrant
 - Virtualbox
+- A powerlevel10k compatible [font](https://github.com/romkatv/powerlevel10k#meslo-nerd-font-patched-for-powerlevel10k), if you want to use it. See above how to use with other font.
 
 ## Usage
 - Install Vagrant plugins: install_vagrant_plugins.sh
