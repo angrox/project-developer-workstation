@@ -1,6 +1,6 @@
 {
   "nodes": {
-    "myf28": {
+    "myf30": {
       ":ip": "dhcp",
       "ports": [],
       ":memory": 2048,
