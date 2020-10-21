@@ -3,7 +3,7 @@
 
 class CustomInstaller < VagrantVbguest::Installers::Linux
   def install(opts=nil, &block)
-    communicate.sudo('dnf install -y libxcrypt-compat kernel-devel-$(uname -r) gcc make perl', opts, &block)
+    communicate.sudo('dnf install -y bzip2 libxcrypt-compat kernel-devel-$(uname -r) gcc make perl', opts, &block)
     # calling `super` will run the installation
     # also it takes care of uploading the right iso file into the box
     # and cleaning up afterward
