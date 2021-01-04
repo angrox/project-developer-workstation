@@ -105,6 +105,31 @@
       warn: False
     become: yes
 
+  - name: Install github binenv file installer
+    command: "/vagrant/files/bin/install_binenv"
+    args:
+      creates: /home/vagrant/.binenv/shim
+
+  - name: Install packges via binenv
+    command: "/home/vagrant/.binenv/binenv install {{ item }}"
+    with_items:
+      - terraform
+      - terragrunt
+      - tflint
+      - stern
+      - helm
+      - k9s
+      - kubens
+      - kubectx
+      - fzf
+
+  - name: Add PATH to binenv dir
+    lineinfile:
+      path: /home/vagrant/.zshenv
+      regexp: '^export PATH'
+      line:   'export PATH=$PATH:/home/vagrant/.binenv'
+      create: yes
+
   - name: Install pip tools
     command:
       cmd: "pip3 install --upgrade {{ item }}"
@@ -125,87 +150,9 @@
       - haveged
     become: true
 
-  - name: Install profitbricks-cli
-    command:
-      cmd: "npm install -g profitbricks-cli"
-    become: true
-
-  - name: Install liquidprompt
-    command:
-      cmd: "git clone https://github.com/nojhan/liquidprompt.git /usr/share/liquidprompt"
-      creates: /usr/share/liquidprompt
-    become: true
-
-  - name: Check local and remote terraform version
-    command: "/vagrant/files/bin/update_terraform"
-    register: update_terraform
-
-  - name: Set update_terraform fact
-    set_fact:
-      update_terraform: "{{ update_terraform.stdout_lines[0]|int }}"
-
-  - name: Install Terraform
-    shell:
-      cmd: "/vagrant/files/bin/install_terraform"
-    become: true
-    when: update_terraform|bool
-
-  - name: Check local and remote helm version
-    command: "/vagrant/files/bin/update_helm"
-    register: update_helm
-
-  - name: Set update_helm fact
-    set_fact:
-      update_helm: "{{ update_helm.stdout_lines[0]|int }}"
-
-  - name: Install helm
-    shell:
-      cmd: "/vagrant/files/bin/install_helm"
-    become: true
-    when: update_helm|bool
-
-  - name: Install kubectx
-    get_url:
-      url: https://raw.githubusercontent.com/ahmetb/kubectx/master/kubectx
-      dest: /usr/local/bin/kubectx
-    become: true
-
-  - name: Install kubens
-    get_url:
-      url: https://raw.githubusercontent.com/ahmetb/kubectx/master/kubens
-      dest: /usr/local/bin/kubens
-    become: true
-
-  - name: Filemods for kubens and kubectx
-    file:
-      path: "/usr/local/bin/{{ item }}"
-      mode: 0755
-    with_items:
-      - kubens
-      - kubectx
-    become: true
-
-  - name: Install or Update k9s
-    command:
-      cmd: /vagrant/files/bin/install_k9s
-      warn: False
-    become: true
-
-  - name: Install or Update Terragrunt
-    command:
-      cmd: /vagrant/files/bin/install_terragrunt
-      warn: False
-    become: true
-
   - name: Install or Update Kubebox
     command:
       cmd: /vagrant/files/bin/install_kubebox
-      warn: False
-    become: true
-
-  - name: Install or Update Stern
-    command:
-      cmd: /vagrant/files/bin/install_stern
       warn: False
     become: true
 

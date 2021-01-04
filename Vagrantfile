@@ -51,8 +51,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       config.vm.provision :shell, :path => node_values[':bootstrap']
-      #config.vm.synced_folder node_values[':sync'][0], node_values[':sync'][1], type: "nfs", mount_options: ['rw', 'vers=3', 'tcp'], linux__nfs_options: ['rw','no_subtree_check','all_squash','async']
-      #config.vm.synced_folder node_values[':sync'][0], node_values[':sync'][1], mount_options: ["cache=none", "fmode=644"]
       config.vm.synced_folder node_values[':sync'][0], node_values[':sync'][1], mount_options: ["cache=none"]
     end
   end
