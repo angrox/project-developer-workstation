@@ -1,0 +1,7 @@
+#!/bin/bash
+
+wget -q https://github.com/devops-works/binenv/releases/latest/download/binenv_linux_amd64 -O binenv
+chmod +x binenv
+./binenv update --cache
+./binenv install binenv
+rm binenv
