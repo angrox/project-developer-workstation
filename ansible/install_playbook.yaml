@@ -98,6 +98,7 @@
         - util-linux-user
         - zsh
         - the_silver_searcher
+        - ripgrep
 
   - name: Install packages via cmd
     command:
