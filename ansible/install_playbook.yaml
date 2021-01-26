@@ -44,6 +44,12 @@
     when: dockerce_downloaded.changed
     become: true
 
+  - name: Exclude kernel package because they can break a virtualbox startup
+    lineinfile:
+      path: '/etc/dnf/dnf.conf'
+      regexp: '^exclude='
+      line:   'exclude=kernel*'
+
   - name: Upgrade all packages
     package:
       name: "*"
