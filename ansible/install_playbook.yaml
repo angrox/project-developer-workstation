@@ -49,6 +49,7 @@
       path: '/etc/dnf/dnf.conf'
       regexp: '^exclude='
       line:   'exclude=kernel*'
+    become: true
 
   - name: Upgrade all packages
     package:
