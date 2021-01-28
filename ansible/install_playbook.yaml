@@ -1,4 +1,6 @@
 - hosts: localhost
+  environment:
+    PATH: "$PATH:$HOME/.binenv"
   tasks:
   - name: Add azure-cli DNF/YUM repos
     yum_repository:
@@ -111,6 +113,15 @@
     args:
       creates: /home/vagrant/.binenv/shim
 
+  - name: Set PATH for binenv
+    copy:
+      dest: '/etc/profile.d/binenv.sh'
+      content: |
+        export PATH=$PATH:$HOME/.binenv
+
+  - name: Update binenv distribution cache
+    command: "/home/vagrant/.binenv/binenv update"
+
   - name: Install packges via binenv
     command: "/home/vagrant/.binenv/binenv install {{ item }}"
     with_items:
@@ -123,6 +134,7 @@
       - kubens
       - kubectx
       - fzf
+      - chezmoi
 
   - name: Add PATH to binenv dir
     lineinfile:
