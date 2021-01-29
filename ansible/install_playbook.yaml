@@ -108,6 +108,7 @@
         - zsh
         - the_silver_searcher
         - ripgrep
+        - git-delta
 
   - name: Install packages via cmd
     command:
