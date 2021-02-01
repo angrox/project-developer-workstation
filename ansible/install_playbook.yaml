@@ -1,6 +1,6 @@
 - hosts: localhost
   environment:
-    PATH: "$PATH:$HOME/.binenv"
+    PATH: "{{ ansible_env.PATH }}:{{ ansible_env.HOME }}/.binenv"
   tasks:
   - name: Add azure-cli DNF/YUM repos
     yum_repository:
@@ -54,14 +54,15 @@
     become: true
 
   - name: Upgrade all packages
-    package:
+    dnf:
       name: "*"
       state: latest
+      update_cache: true
     become: true
 
-  - name: Create packages-to-install list
-    set_fact:
-      packages_to_install:
+  - name: install basic packages
+    dnf:
+      name:
         - git
         - docker-ce
         - docker-compose
@@ -109,12 +110,8 @@
         - the_silver_searcher
         - ripgrep
         - git-delta
-
-  - name: Install packages via cmd
-    command:
-      cmd: "dnf install -y {{ packages_to_install | join(' ') }}"
-      warn: False
-    become: yes
+      state: present
+    become: true
 
   - name: Install github binenv file installer
     command: "/vagrant/files/bin/install_binenv"
