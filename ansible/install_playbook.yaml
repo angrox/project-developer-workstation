@@ -110,6 +110,7 @@
         - the_silver_searcher
         - ripgrep
         - git-delta
+        - pre-commit
       state: present
     become: true
 
