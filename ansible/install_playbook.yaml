@@ -141,6 +141,7 @@
       - kubectx
       - fzf
       - chezmoi
+      - tfsec
 
   - name: Add PATH to binenv dir
     lineinfile:
