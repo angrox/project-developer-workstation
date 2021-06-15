@@ -111,6 +111,7 @@
         - ripgrep
         - git-delta
         - pre-commit
+        - tmux
       state: present
     become: true
 
