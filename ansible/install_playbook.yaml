@@ -115,6 +115,18 @@
       state: present
     become: true
 
+  - name: Set custom docker network
+    copy:
+      dest: '/etc/docker/daemon.json'
+      content: |
+        {
+          "default-address-pools":
+          [
+            {"base":"10.9.1.0/21","size":24}
+          ]
+        }
+    become: true
+
   - name: Install github binenv file installer
     command: "/vagrant/files/bin/install_binenv"
     args:
