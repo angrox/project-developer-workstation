@@ -112,6 +112,7 @@
         - git-delta
         - pre-commit
         - tmux
+        - exa
       state: present
     become: true
 
