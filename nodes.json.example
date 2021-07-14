@@ -4,7 +4,7 @@
       ":ip": "dhcp",
       "ports": [],
       ":memory": 2048,
-      ":box": "fedora/30-cloud-base",
+      ":box": "fedora/33-cloud-base",
       ":bootstrap": "bootstrap-fedora.sh",
       ":sync": ["~/test", "/data"]
     },
@@ -12,7 +12,7 @@
       ":ip": "192.168.35.92",
       "ports": [],
       ":memory": 1024,
-      ":box": "fedora/30-cloud-base",
+      ":box": "fedora/33-cloud-base",
       ":bootstrap": "bootstrap-fedora.sh",
       ":sync": ["~/test", "/data"]
     }
