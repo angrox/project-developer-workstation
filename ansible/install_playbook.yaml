@@ -116,6 +116,15 @@
       state: present
     become: true
 
+  - name: Create /etc/docker directory
+    file:
+      path: /etc/docker
+      state: directory
+      owner: root
+      group: root
+      mode : '0644'
+    become: true
+
   - name: Set custom docker network
     copy:
       dest: '/etc/docker/daemon.json'
@@ -138,6 +147,7 @@
       dest: '/etc/profile.d/binenv.sh'
       content: |
         export PATH=$PATH:$HOME/.binenv
+    become: true
 
   - name: Update binenv distribution cache
     command: "/home/vagrant/.binenv/binenv update"
@@ -150,7 +160,7 @@
       - tflint
       - stern
       - helm
-      - k9s
+        # - k9s
       - kubens
       - kubectx
       - fzf
