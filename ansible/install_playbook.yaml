@@ -114,6 +114,7 @@
         - tmux
         - exa
         - neovim
+        - fzf
       state: present
     become: true
 
@@ -164,7 +165,6 @@
         # - k9s
       - kubens
       - kubectx
-      - fzf
       - chezmoi
       - tfsec
 
