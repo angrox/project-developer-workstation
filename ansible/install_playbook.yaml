@@ -12,16 +12,6 @@
       gpgcheck: yes
     become: true
 
-  - name: Add google cloud sdk DNF/YUM repos
-    yum_repository:
-      name: google-cloud-sdk
-      description: "Google Cloud SDK"
-      enabled: yes
-      baseurl: https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64
-      gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-      gpgcheck: yes
-    become: true
-
   - name: Add kubernetes DNF/YUM repos
     yum_repository:
       name: kubernetes
@@ -44,13 +34,6 @@
       cmd: dnf config-manager --set-enabled docker-ce-nightly
       warn: False
     when: dockerce_downloaded.changed
-    become: true
-
-  - name: Exclude kernel package because they can break a virtualbox startup
-    lineinfile:
-      path: '/etc/dnf/dnf.conf'
-      regexp: '^exclude='
-      line:   'exclude=kernel*'
     become: true
 
   - name: Upgrade all packages
@@ -85,11 +68,7 @@
         - zip
         - myrepos
         - recode
-        - java-1.8.0-openjdk
-        - java-1.8.0-openjdk-devel
-        - google-cloud-sdk
         - redhat-rpm-config
-        - kubectl
         - libffi-devel
         - gcc
         - libpqxx-devel
@@ -115,6 +94,7 @@
         - exa
         - neovim
         - fzf
+        - openvpn
       state: present
     become: true
 
@@ -167,6 +147,7 @@
       - kubectx
       - chezmoi
       - tfsec
+      - kubectl
 
   - name: Add PATH to binenv dir
     lineinfile:
