@@ -107,6 +107,19 @@
       state: present
     become: true
 
+  - name: prevent smp bug in parallels by disabling video.virgl
+    lineinfile:
+      dest: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX'
+      line: 'GRUB_CMDLINE_LINUX="rd.lvm.lv=fedora_fedora/root rhgb quiet video.virgl=0"'
+    become: true
+    register: grub_changed
+
+  - name: Recreate grub config
+    ansible.builtin.command: grub2-mkconfig -o /boot/grub2/grub.cfg
+    become: true
+    when: grub_changed.changed
+
   - name: Create /etc/docker directory
     file:
       path: /etc/docker
@@ -209,7 +222,7 @@
     become_user: vagrant
 
   - name: Set zsh as default shell
-    when: oh_my_zsh_installed|bool  
+    when: oh_my_zsh_installed|bool
     become: yes
     become_user: vagrant
     expect:
