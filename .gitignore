@@ -1,5 +1,4 @@
 ssh/id*
 *.log
 *.txt
-nodes.json
-.vagrant/*
+fedora.yaml

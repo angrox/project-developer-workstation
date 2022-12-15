@@ -1,9 +1,15 @@
 - hosts: localhost
-  environment:
-    PATH: "{{ ansible_env.PATH }}:{{ ansible_env.HOME }}/.binenv"
+  vars:
+    homedir: "/home/lima.linux"
+    configdir: "/limaconfig"
+    user: "lima"
+    arch_mapping: {
+      "aarch64": "arm64",
+      "x86_64": "amd64"
+    }
   tasks:
   - name: Add azure-cli DNF/YUM repos
-    yum_repository:
+    ansible.builtin.yum_repository:
       name: azure-cli
       description: "Azure CLI"
       enabled: yes
@@ -13,11 +19,11 @@
     become: true
 
   - name: Add google cloud sdk DNF/YUM repos
-    yum_repository:
+    ansible.builtin.yum_repository:
       name: google-cloud-sdk
       description: "Google Cloud SDK"
       enabled: yes
-      baseurl: https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-x86_64
+      baseurl: "https://packages.cloud.google.com/yum/repos/cloud-sdk-el7-{{ ansible_architecture }}"
       gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
       gpgcheck: yes
     become: true
@@ -27,7 +33,7 @@
       name: kubernetes
       description: "Kubernetes"
       enabled: yes
-      baseurl: https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+      baseurl: "https://packages.cloud.google.com/yum/repos/kubernetes-el7-{{ ansible_architecture }}"
       gpgkey: https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
       gpgcheck: yes
     become: true
@@ -42,27 +48,18 @@
   - name: Enable docker-ce-nightly
     command:
       cmd: dnf config-manager --set-enabled docker-ce-nightly
-      warn: False
     when: dockerce_downloaded.changed
     become: true
 
-  - name: Exclude kernel package because they can break a virtualbox startup
-    lineinfile:
-      path: '/etc/dnf/dnf.conf'
-      regexp: '^exclude='
-      line:   'exclude=kernel*'
-    become: true
-
   - name: Upgrade all packages
-    dnf:
+    package:
       name: "*"
       state: latest
-      update_cache: true
     become: true
 
-  - name: install basic packages
-    dnf:
-      name:
+  - name: Create packages-to-install list
+    set_fact:
+      packages_to_install:
         - git
         - docker-ce
         - docker-compose
@@ -108,71 +105,42 @@
         - util-linux-user
         - zsh
         - the_silver_searcher
-        - ripgrep
-        - git-delta
-        - pre-commit
-        - tmux
-        - exa
-        - neovim
         - fzf
-      state: present
-    become: true
 
-  - name: Create /etc/docker directory
-    file:
-      path: /etc/docker
-      state: directory
-      owner: root
-      group: root
-      mode : '0644'
-    become: true
-
-  - name: Set custom docker network
-    copy:
-      dest: '/etc/docker/daemon.json'
-      content: |
-        {
-          "default-address-pools":
-          [
-            {"base":"10.9.1.0/21","size":24}
-          ]
-        }
-    become: true
+  - name: Install packages via cmd
+    ansible.builtin.command:
+      cmd: "dnf install -y {{ packages_to_install | join(' ') }}"
+    become: yes
 
   - name: Install github binenv file installer
-    command: "/vagrant/files/bin/install_binenv"
+    ansible.builtin.command: "{{ vars.configdir }}/files/bin/install_binenv {{ [ansible_architecture] | map('extract', arch_mapping) | first }}"
     args:
-      creates: /home/vagrant/.binenv/shim
+      creates: "{{ vars.homedir }}/.binenv/shim"
 
-  - name: Set PATH for binenv
-    copy:
-      dest: '/etc/profile.d/binenv.sh'
-      content: |
-        export PATH=$PATH:$HOME/.binenv
-    become: true
-
-  - name: Update binenv distribution cache
-    command: "/home/vagrant/.binenv/binenv update"
+  - name: Update binenv cache files
+    ansible.builtin.command: "{{ vars.homedir }}/.binenv/binenv update"
+    args:
+      creates: "{{ vars.homedir }}/.cache/binenv/cache.json"
 
   - name: Install packges via binenv
-    command: "/home/vagrant/.binenv/binenv install {{ item }}"
+    command: "{{ vars.homedir }}/.binenv/binenv install {{ item }}"
     with_items:
       - terraform
       - terragrunt
       - tflint
       - stern
       - helm
-        # - k9s
+      - k9s
       - kubens
       - kubectx
+      - fzf
       - chezmoi
-      - tfsec
 
   - name: Add PATH to binenv dir
     lineinfile:
-      path: /home/vagrant/.zshenv
-      regexp: '^export PATH'
-      line:   'export PATH=$PATH:/home/vagrant/.binenv'
+      path: "{{ vars.homedir }}/.zshenv"
+      regexp: "^export PATH"
+      line:   "export PATH=$PATH:{{ vars.homedir }}/.binenv"
       create: yes
 
   - name: Install pip tools
@@ -182,8 +150,6 @@
       - wharfee
       - mycli
       - bpython
-      - jmespath-terminal
-      - terraform-compliance
     become: yes
 
   - name: Enable and start services
@@ -197,15 +163,14 @@
 
   - name: Install or Update Kubebox
     command:
-      cmd: /vagrant/files/bin/install_kubebox
-      warn: False
+      cmd: "{{ vars.configdir }}/files/bin/install_kubebox"
     become: true
 
   - name: Check oh-my-zsh installed
-    command: "/vagrant/files/bin/oh_my_zsh_installed"
+    command: "{{ vars.configdir }}/files/bin/oh_my_zsh_installed"
     register: oh_my_zsh_installed
     become: yes
-    become_user: vagrant
+    become_user: "{{ vars.user }}"
 
   - name: Set oh_my_zsh_installed fact
     set_fact:
@@ -213,23 +178,19 @@
 
   - name: Install and configure oh-my-zsh
     shell:
-      cmd: "/vagrant/files/bin/install_oh_my_zsh"
+      cmd: "{{ vars.configdir }}/files/bin/install_oh_my_zsh"
     when: oh_my_zsh_installed|bool
     become: yes
-    become_user: vagrant
+    become_user: "{{ vars.user }}"
 
   - name: Copy powerlevel10k config
     become: yes
-    become_user: vagrant
+    become_user: "{{ vars.user }}"
     copy:
-      src: /vagrant/files/config/p10k.zsh
-      dest: ~/.p10k.zsh
+      src: "{{ vars.configdir }}/files/config/p10k.zsh"
+      dest: "~/.p10k.zsh"
 
   - name: Set zsh as default shell
-    when: oh_my_zsh_installed|bool  
+    when: oh_my_zsh_installed|bool
     become: yes
-    become_user: vagrant
-    expect:
-        command: "chsh -s /usr/bin/zsh"
-        responses:
-          (?i)password: "vagrant"
+    command: "usermod -s /usr/bin/zsh {{ vars.user }}"

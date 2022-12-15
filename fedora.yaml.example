@@ -1,0 +1,37 @@
+arch: default
+# for x86_64 emulation:
+# arch: x86_64
+images:
+- location: "https://download.fedoraproject.org/pub/fedora/linux/releases/37/Cloud/x86_64/images/Fedora-Cloud-Base-36-1.7.x86_64.qcow2"
+  arch: "x86_64"
+  digest: "sha256:ca9e514cc2f4a7a0188e7c68af60eb4e573d2e6850cc65b464697223f46b4605"
+- location: "https://download.fedoraproject.org/pub/fedora/linux/releases/37/Cloud/aarch64/images/Fedora-Cloud-Base-37-1.7.aarch64.qcow2"
+  arch: "aarch64"
+  digest: "sha256:cc8b0f49bc60875a16eef65ad13e0e86ba502ba3585cc51146f11f4182a628c0"
+cpus: 4
+memory: 4GiB
+disk: 40GiB
+mounts:
+- location: "<DIR>/config"
+  mountPoint: "/limaconfig"
+  writable: true
+- location: "<DIR>/data"
+  mountPoint: "/data"
+  writable: true
+mountType: "9p"
+provision:
+  - mode: user
+    script: |
+      #!/bin/bash
+      set -eux -o pipefail
+      if [ -f /.lima_configured ]; then
+        echo "inital configuration already done"
+        exit 0
+      fi
+      sudo dnf -y install ansible bison flex psmisc libxcrypt-compat
+      /usr/bin/ansible-playbook /limaconfig/ansible/install_playbook.yaml
+      sudo touch /.lima_configured
+
+message: |
+  Welcome to Fedora!
+  {{.HostOS}} {{.HostArch}}
