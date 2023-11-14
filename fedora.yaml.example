@@ -29,7 +29,7 @@ provision:
         exit 0
       fi
       sudo dnf -y install ansible bison flex psmisc libxcrypt-compat
-      /usr/bin/ansible-playbook /limaconfig/ansible/install_playbook.yaml
+      /usr/bin/ansible-playbook /limaconfig/ansible/install_playbook.yaml 2>&1 | tee /limaconfig/ansible.output
       sudo touch /.lima_configured
 
 message: |
