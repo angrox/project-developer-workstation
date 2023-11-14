@@ -106,6 +106,7 @@
         - zsh
         - the_silver_searcher
         - fzf
+        - just
 
   - name: Install packages via cmd
     ansible.builtin.command:
