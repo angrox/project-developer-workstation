@@ -2,3 +2,4 @@ ssh/id*
 *.log
 *.txt
 *.yaml
+ansible.output
