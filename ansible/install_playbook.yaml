@@ -107,6 +107,13 @@
         - the_silver_searcher
         - fzf
         - just
+        - git-delta
+        - gcc-c++
+        - cargo
+        - nodejs
+        - ripgrep
+        - neovim
+        - awscli
 
   - name: Install packages via cmd
     ansible.builtin.command:
